@@ -45,11 +45,21 @@ func Initialize(part int) {
 	}
 }
 
-func Unseal() {
+func Unseal(secrets []string) {
 
 	// Combine Keys
+	_, err := utils.CombineSecret(secrets)
+	if err != nil {
+		log.Fatal("Error unsealing vault:", err)
+		return
+	}
+
+	if isUnsealed() {
+		log.Println("Vault has already been unsealed")
+	}
 
 	// Set localStorageUnseal value to true
+	utils.Set(unsealHashKey, "1")
 }
 
 func GetItem() {
@@ -64,4 +74,22 @@ func SetItem() {
 	// Check localStorage is unsealed
 
 	// Set Item
+}
+
+func isInitialized() bool {
+	isInitialized := utils.Get(initializeHashKey)
+	if isInitialized != "" && isInitialized == "1" {
+		return true
+	}
+
+	return false
+}
+
+func isUnsealed() bool {
+	isUnsealed := utils.Get(unsealHashKey)
+	if isUnsealed != "" && isUnsealed == "1" {
+		return true
+	}
+
+	return false
 }

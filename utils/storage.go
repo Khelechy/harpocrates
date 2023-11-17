@@ -50,13 +50,13 @@ func Set(key, value string) {
 	}
 }
 
-func Get(key string) {
+func Get(key string) string {
 
 	vault := OpenStorage()
 	defer func() {
 		_ = vault.Close()
 	}()
-	
+
 	byteKey := []byte(key)
 
 	byteValue, err := vault.Get(byteKey)
@@ -68,4 +68,6 @@ func Get(key string) {
 	value := bytes.NewBuffer(byteValue).String()
 
 	fmt.Printf("Key: %s, Value: %s", key, value)
+
+	return value
 }
