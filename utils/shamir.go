@@ -2,32 +2,32 @@ package utils
 
 import (
 	"bytes"
-	"fmt"
-	"os"
+	"encoding/hex"
+	"log"
 
 	"github.com/hashicorp/vault/shamir"
 )
 
-func splitSecret(secret string, parts, threshold int) ([]string, error) {
+func SplitSecret(secret string, parts, threshold int) ([]string, error) {
 
 	var stringParts []string
 	byteSecret := []byte(secret)
 
 	byteParts, err := shamir.Split(byteSecret, parts, threshold)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Failed to split secret: %v\n", err)
+		log.Fatalf("Failed to split secret: %v\n", err)
 		return nil, err
 	}
 
 	for _, bytePart := range byteParts {
-		str := bytes.NewBuffer(bytePart).String()
+		str := hex.EncodeToString(bytePart)
 		stringParts = append(stringParts, str)
 	}
 
 	return stringParts, nil
 }
 
-func combineSecret(secrets []string) (string, error) {
+func CombineSecret(secrets []string) (string, error) {
 
 	var byteParts [][]byte
 
@@ -39,7 +39,7 @@ func combineSecret(secrets []string) (string, error) {
 	secretByte, err := shamir.Combine(byteParts)
 
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Failed to combine secret: %v\n", err)
+		log.Fatalf("Failed to combine secret: %v\n", err)
 		return "", err
 	}
 

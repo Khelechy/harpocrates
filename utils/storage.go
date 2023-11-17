@@ -27,7 +27,7 @@ func OpenStorage() *scdb.Store {
 	)
 
 	if err != nil {
-		log.Fatalf("error opening store: %s", err)
+		log.Fatalf("Error opening store: %s", err)
 	}
 
 	return vault
@@ -46,7 +46,7 @@ func Set(key, value string) {
 	err := vault.Set(byteKey, byteValue, nil)
 
 	if err != nil {
-		log.Fatalf("error inserting: %s", err)
+		log.Fatalf("Error inserting: %s", err)
 	}
 }
 
@@ -62,7 +62,7 @@ func Get(key string) {
 	byteValue, err := vault.Get(byteKey)
 
 	if err != nil {
-		log.Fatalf("error getting: %s", err)
+		log.Fatalf("Error getting: %s", err)
 	}
 
 	value := bytes.NewBuffer(byteValue).String()
