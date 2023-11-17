@@ -10,20 +10,17 @@ import (
 	"github.com/google/uuid"
 )
 
-type Harpocrates struct {
-}
-
-var initializeHashKey = "tholos_initialize_key"
+var mountHashKey = "tholos_mount_key"
 var unsealHashKey = "tholos_unseal_key"
 
-func Initialize(part int) {
+func Mount(part int) {
 	// Create keys and split ( into parts )
 
-	if part <= 0 {
+	if part <= 5 {
 		part = 5
 	}
 	seedingSecret := uuid.New().String()
-	secrets, err := utils.SplitSecret(seedingSecret, part, part - 1)
+	secrets, err := utils.SplitSecret(seedingSecret, part, 3)
 
 	if err != nil {
 		log.Fatalf("Error splitting secrets: %s", err)
@@ -38,13 +35,13 @@ func Initialize(part int) {
 		return
 	}
 
-	if err = os.WriteFile("keys.json", jsonData, 0644); err != nil{
+	if err = os.WriteFile("../keys.json", jsonData, 0644); err != nil {
 		log.Fatal("Error writing to file:", err)
 		return
 	}
 
 	// Set localStorageUnseal value to true
-	utils.SetItem(initializeHashKey, "1")
+	utils.SetItem(mountHashKey, "1")
 }
 
 func Unseal(secrets []string) {
@@ -62,6 +59,19 @@ func Unseal(secrets []string) {
 
 	// Set localStorageUnseal value to true
 	utils.SetItem(unsealHashKey, "1")
+}
+
+func Seal(secrets []string) {
+	// Combine Keys
+	_, err := utils.CombineSecret(secrets)
+	if err != nil {
+		log.Fatal("Error sealing vault:", err)
+		return
+	}
+
+	// Set localStorageUnseal value to false
+	utils.SetItem(unsealHashKey, "0")
+
 }
 
 func GetItem(key string) string {
@@ -88,13 +98,14 @@ func SetItem(key, value string) {
 	// Check localStorage is unsealed
 	if isUnsealed() {
 		utils.SetItem(key, value)
+		return
 	}
 
 	log.Fatal("Vault has not been unsealed")
 }
 
 func isInitialized() bool {
-	isInitialized := utils.GetItem(initializeHashKey)
+	isInitialized := utils.GetItem(mountHashKey)
 	if isInitialized != "" && isInitialized == "1" {
 		return true
 	}

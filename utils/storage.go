@@ -7,7 +7,7 @@ import (
 	"github.com/sopherapps/go-scdb/scdb"
 )
 
-var tholos = "harpocrates_db"
+var tholos = "../harpocrates_db"
 
 var maxKeys uint64 = 1_000_000
 var redundantBlocks uint16 = 1
