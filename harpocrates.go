@@ -23,7 +23,7 @@ func Initialize(part int) {
 		part = 5
 	}
 	seedingSecret := uuid.New().String()
-	secrets, err := utils.SplitSecret(seedingSecret, part, part-1)
+	secrets, err := utils.SplitSecret(seedingSecret, part, part - 1)
 
 	if err != nil {
 		log.Fatalf("Error splitting secrets: %s", err)
@@ -38,8 +38,7 @@ func Initialize(part int) {
 		return
 	}
 
-	err = os.WriteFile("keys.json", jsonData, 0644)
-	if err != nil {
+	if err = os.WriteFile("keys.json", jsonData, 0644); err != nil{
 		log.Fatal("Error writing to file:", err)
 		return
 	}
@@ -90,6 +89,8 @@ func SetItem(key, value string) {
 	if isUnsealed() {
 		utils.SetItem(key, value)
 	}
+
+	log.Fatal("Vault has not been unsealed")
 }
 
 func isInitialized() bool {

@@ -20,3 +20,5 @@ harpocrates_db
 
 # Go workspace file
 go.work
+
+keys.json

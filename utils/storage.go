@@ -42,9 +42,7 @@ func SetItem(key, value string) {
 	byteKey := []byte(key)
 	byteValue := []byte(value)
 
-	err := vault.Set(byteKey, byteValue, nil)
-
-	if err != nil {
+	if err := vault.Set(byteKey, byteValue, nil); err != nil {
 		log.Fatalf("Error inserting: %s", err)
 	}
 }
