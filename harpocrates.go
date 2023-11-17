@@ -20,10 +20,10 @@ func Initialize(part int) {
 	// Create keys and split ( into parts )
 
 	if part <= 0 {
-		part = 3
+		part = 5
 	}
 	seedingSecret := uuid.New().String()
-	secrets, err := utils.SplitSecret(seedingSecret, part, part)
+	secrets, err := utils.SplitSecret(seedingSecret, part, part-1)
 
 	if err != nil {
 		log.Fatalf("Error splitting secrets: %s", err)
@@ -43,6 +43,9 @@ func Initialize(part int) {
 		log.Fatal("Error writing to file:", err)
 		return
 	}
+
+	// Set localStorageUnseal value to true
+	utils.SetItem(initializeHashKey, "1")
 }
 
 func Unseal(secrets []string) {
@@ -59,25 +62,38 @@ func Unseal(secrets []string) {
 	}
 
 	// Set localStorageUnseal value to true
-	utils.Set(unsealHashKey, "1")
+	utils.SetItem(unsealHashKey, "1")
 }
 
-func GetItem() {
+func GetItem(key string) string {
+
+	if isInitialized() == false {
+		log.Fatal("Vault has not been initialized")
+	}
 
 	// Check localStorage is unsealed
+	if isUnsealed() {
+		return utils.GetItem(key)
+	}
 
-	// Get Item
+	log.Fatal("Vault has not been unsealed")
+	return ""
 }
 
-func SetItem() {
+func SetItem(key, value string) {
+
+	if isInitialized() == false {
+		log.Fatal("Vault has not been initialized")
+	}
 
 	// Check localStorage is unsealed
-
-	// Set Item
+	if isUnsealed() {
+		utils.SetItem(key, value)
+	}
 }
 
 func isInitialized() bool {
-	isInitialized := utils.Get(initializeHashKey)
+	isInitialized := utils.GetItem(initializeHashKey)
 	if isInitialized != "" && isInitialized == "1" {
 		return true
 	}
@@ -86,7 +102,7 @@ func isInitialized() bool {
 }
 
 func isUnsealed() bool {
-	isUnsealed := utils.Get(unsealHashKey)
+	isUnsealed := utils.GetItem(unsealHashKey)
 	if isUnsealed != "" && isUnsealed == "1" {
 		return true
 	}

@@ -2,7 +2,6 @@ package utils
 
 import (
 	"bytes"
-	"fmt"
 	"log"
 
 	"github.com/sopherapps/go-scdb/scdb"
@@ -33,7 +32,7 @@ func OpenStorage() *scdb.Store {
 	return vault
 }
 
-func Set(key, value string) {
+func SetItem(key, value string) {
 
 	vault := OpenStorage()
 	defer func() {
@@ -50,7 +49,7 @@ func Set(key, value string) {
 	}
 }
 
-func Get(key string) string {
+func GetItem(key string) string {
 
 	vault := OpenStorage()
 	defer func() {
@@ -66,8 +65,6 @@ func Get(key string) string {
 	}
 
 	value := bytes.NewBuffer(byteValue).String()
-
-	fmt.Printf("Key: %s, Value: %s", key, value)
 
 	return value
 }
