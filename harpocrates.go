@@ -91,9 +91,9 @@ func Seal(secrets []string) {
 
 }
 
-func GetItem(key string) string {
+func Get(key string) string {
 
-	if isInitialized() == false {
+	if isMounted() == false {
 		log.Fatal("Vault has not been initialized")
 	}
 
@@ -106,9 +106,9 @@ func GetItem(key string) string {
 	return ""
 }
 
-func SetItem(key, value string) {
+func Set(key, value string) {
 
-	if isInitialized() == false {
+	if isMounted() == false {
 		log.Fatal("Vault has not been initialized")
 	}
 
@@ -128,9 +128,9 @@ func ValidateSharedKeys(combinedSeedingSecret, seedingSecret string) {
 	}
 }
 
-func isInitialized() bool {
-	isInitialized := utils.GetItem(mountHashKey)
-	if isInitialized != "" && isInitialized == "1" {
+func isMounted() bool {
+	isMounted := utils.GetItem(mountHashKey)
+	if isMounted != "" && isMounted == "1" {
 		return true
 	}
 

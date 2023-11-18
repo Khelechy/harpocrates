@@ -41,7 +41,7 @@ var getItemCmd = &cobra.Command{
 
 		if keyFlag != "" {
 			key = keyFlag
-			item := harpocrates.GetItem(key)
+			item := harpocrates.Get(key)
 			fmt.Println(item)
 		} else {
 			log.Fatalln("Key flag is empty")
@@ -64,7 +64,7 @@ var setItemCmd = &cobra.Command{
 		if keyFlag != "" || valueFlag != "" {
 			key = keyFlag
 			value = valueFlag
-			harpocrates.SetItem(key, value)
+			harpocrates.Set(key, value)
 		} else {
 			log.Fatalln("Key or Value flag is empty")
 		}
