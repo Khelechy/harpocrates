@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"bytes"
+	//"bytes"
 	"encoding/hex"
 	"log"
 
@@ -32,7 +32,7 @@ func CombineSecret(secrets []string) (string, error) {
 	var byteParts [][]byte
 
 	for _, stringPart := range secrets {
-		bytePart := []byte(stringPart)
+		bytePart, _ := hex.DecodeString(stringPart)
 		byteParts = append(byteParts, bytePart)
 	}
 
@@ -43,7 +43,7 @@ func CombineSecret(secrets []string) (string, error) {
 		return "", err
 	}
 
-	secret := bytes.NewBuffer(secretByte).String()
+	secret := string(secretByte)
 
 	return secret, nil
 }

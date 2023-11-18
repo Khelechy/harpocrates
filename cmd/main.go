@@ -3,11 +3,18 @@ package main
 import (
 	"fmt"
 	"log"
+	"os"
+	"encoding/json"
+	"math/rand"
 
 	"github.com/khelechy/harpocrates"
 
 	"github.com/spf13/cobra"
 )
+
+type KeysData struct {
+	Keys []string `json:"keys"`
+}
 
 var rootCmd = &cobra.Command{
 	Use:   "harpocrates",
@@ -64,8 +71,65 @@ var setItemCmd = &cobra.Command{
 	},
 }
 
+var sealCmd = &cobra.Command{
+	Use: "seal",
+	Short: "Seals the vault so that Set and Get operations would be blocked",
+	Run: func(cmd *cobra.Command, args []string) {
+		jsonFilePathFlag, _ := cmd.Flags().GetString("path")
+
+		if jsonFilePathFlag != "" {
+			keys := decodeJsonAndSelectKeys(jsonFilePathFlag)
+			harpocrates.Seal(keys)
+		}else{
+			log.Fatalln("Json file path is empty")
+		}
+	},
+}
+
+var unSealCmd = &cobra.Command{
+	Use: "unseal",
+	Short: "Unseals the vault so that Set and Get operations would be unblocked",
+	Run: func(cmd *cobra.Command, args []string) {
+		jsonFilePathFlag, _ := cmd.Flags().GetString("path")
+
+		if jsonFilePathFlag != "" {
+			keys := decodeJsonAndSelectKeys(jsonFilePathFlag)
+			harpocrates.Unseal(keys)
+		}else{
+			log.Fatalln("Json file path is empty")
+		}
+	},
+}
+
+func decodeJsonAndSelectKeys(jsonFilePath string) []string{
+
+	jsonData, err := os.ReadFile(jsonFilePath)
+	if err != nil {
+		log.Fatalln("Error reading JSON file:", err)
+		return nil
+	}
+
+	// Unmarshal JSON data into KeysData struct
+	var keysData KeysData
+	if err = json.Unmarshal(jsonData, &keysData); err != nil{
+		log.Fatalln("Error unmarshalling JSON:", err)
+		return nil
+	}
+
+	// Randomly select 3 keys from the array
+	selectedKeys := make([]string, 3)
+	for i := 0; i < 3; i++ {
+		randomIndex := rand.Intn(len(keysData.Keys))
+		selectedKeys[i] = keysData.Keys[randomIndex]
+	}
+
+	return selectedKeys
+}
+
 func init() {
 	rootCmd.AddCommand(mountCmd)
+	rootCmd.AddCommand(sealCmd)
+	rootCmd.AddCommand(unSealCmd)
 	rootCmd.AddCommand(getItemCmd)
 	rootCmd.AddCommand(setItemCmd)
 
@@ -77,16 +141,21 @@ func init() {
 
 func main() {
 
-	//harpocrates.Initialize(5)
+	// if err := rootCmd.Execute(); err != nil {
+	// 	fmt.Println(err)
+	// 	os.Exit(1)
+	// }
 
-	//var keys = []string{"aa6ab8828ae248ab7be63ca731ea0adee52a713f97ef76872fd9a8df8d8012ea4c66c8845a", "3499ac76ef82ae119e5b4be0b45d98da86558ea75326eae05b410e0bd78800ba1e9a42f16e", "9c6ed4f5d10644e86871372dddabb23b33c8a1f87c74acd919da49147859d42c786abee5e8"}
+	//harpocrates.Mount(5)
 
-	//harpocrates.Unseal(keys)
+	var keys = []string{"5105c79604545210e5fd30c1269ac1189e748aea93bae50db2d36bde8886adc143", "db206494f721b82e307417f54d18fc9396f12c067fd9d117a1f2e30fc5fb99f429", "94c7bcdf37cd0c2d48b19bf334b6e4c352a2729c55721fc9ef18aebfd94efe3ff8"}
+
+	harpocrates.Unseal(keys)
 
 	//harpocrates.Seal(keys)
 
 	//harpocrates.SetItem("name", "kelechi")
-	ss := harpocrates.GetItem("name")
+	//ss := harpocrates.GetItem("name")
 
-	fmt.Println(ss)
+	//fmt.Println(ss)
 }

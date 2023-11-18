@@ -2,8 +2,10 @@ package harpocrates
 
 import (
 	"encoding/json"
+	"errors"
 	"log"
 	"os"
+	"strings"
 
 	"github.com/khelechy/harpocrates/utils"
 
@@ -12,6 +14,7 @@ import (
 
 var mountHashKey = "tholos_mount_key"
 var unsealHashKey = "tholos_unseal_key"
+var seedingHashKey = "tholos_seeding_key"
 
 func Mount(part int) {
 	// Create keys and split ( into parts )
@@ -19,7 +22,8 @@ func Mount(part int) {
 	if part <= 5 {
 		part = 5
 	}
-	seedingSecret := uuid.New().String()
+	seedkey := uuid.New().String()
+	seedingSecret := strings.ReplaceAll(seedkey, "-", "")
 	secrets, err := utils.SplitSecret(seedingSecret, part, 3)
 
 	if err != nil {
@@ -42,16 +46,22 @@ func Mount(part int) {
 
 	// Set localStorageUnseal value to true
 	utils.SetItem(mountHashKey, "1")
+	utils.SetItem(seedingHashKey, seedingSecret)
 }
 
 func Unseal(secrets []string) {
 
 	// Combine Keys
-	_, err := utils.CombineSecret(secrets)
+	combinedSeedingSecret, err := utils.CombineSecret(secrets)
+
 	if err != nil {
 		log.Fatal("Error unsealing vault:", err)
 		return
 	}
+
+	seedingSecret := utils.GetItem(seedingHashKey)
+
+	ValidateSharedKeys(combinedSeedingSecret, seedingSecret)
 
 	if isUnsealed() {
 		log.Println("Vault has already been unsealed")
@@ -59,15 +69,22 @@ func Unseal(secrets []string) {
 
 	// Set localStorageUnseal value to true
 	utils.SetItem(unsealHashKey, "1")
+
+	log.Println("Vault has successfully been unsealed")
 }
 
 func Seal(secrets []string) {
+
 	// Combine Keys
-	_, err := utils.CombineSecret(secrets)
+	combinedSeedingSecret, err := utils.CombineSecret(secrets)
 	if err != nil {
 		log.Fatal("Error sealing vault:", err)
 		return
 	}
+
+	seedingSecret := utils.GetItem(seedingHashKey)
+
+	ValidateSharedKeys(combinedSeedingSecret, seedingSecret)
 
 	// Set localStorageUnseal value to false
 	utils.SetItem(unsealHashKey, "0")
@@ -102,6 +119,13 @@ func SetItem(key, value string) {
 	}
 
 	log.Fatal("Vault has not been unsealed")
+}
+
+func ValidateSharedKeys(combinedSeedingSecret, seedingSecret string) {
+	if combinedSeedingSecret != seedingSecret {
+		log.Fatal("Error unsealing vault: ", errors.New("Mismatched keys"))
+		return
+	}
 }
 
 func isInitialized() bool {
