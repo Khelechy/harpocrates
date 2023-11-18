@@ -48,14 +48,19 @@ import (
 )
 ```
 
+
+
 - Mount Harpocrates Vault on your environment `harpocrates.Mount(5)`
 ```go
 harpocrates.Mount(5)
 ```
->**Mount(parts)** function takes an integer "parts" as a parameter, which indicates how many parts you want the generated secrets to be broken into.
+
+>**Mount(parts)** function takes an integer "parts" as a parameter, which indicates how many parts you want the generated secrets to be broken into,
 >"parts" should not be less than 5 and not greater than 12.
 
+
 The localStorage `harpocrates_db` folder and a `keys.json` file is generated in the root directory, which contains all the broken down secrets (distributed secrets), which would be used to `Unseal` and `Seal` the vault.
+
 
 ```json
 {
@@ -69,6 +74,8 @@ The localStorage `harpocrates_db` folder and a `keys.json` file is generated in 
 }
 ```
 
+
+
 - Unseal Harpocrates Vault on your environment `harpocrates.Unseal(secrets)`
 Unsealing the vault makes it possible to now store and retrieve data securely, unlocks `Get` and `Set` operations.
 
@@ -77,6 +84,9 @@ var secrets = []string{"f7df31e448edb6613fd27528820845522120def4021ea4c13e5d906e
 harpocrates.Unseal(secrets)
 ```
 >Unseal(secrets) function takes an array of `any three secrets`, combines and validates their authenticity, goes ahead to unseal the vault.
+
+
+
 
 - Seal Harpocrates Vault on your environment `harpocrates.Seal(secrets)`
 Sealing the vault makes it impossible to store and retrieve data securely, locks `Get` and `Set` operations.
@@ -89,11 +99,17 @@ harpocrates.Seal(secrets)
 
 >**Important** `Unseal` must be called after `Mount`, so that the vault would available for `Set`and `Get` operations.
 
+
+
+
 - Storing data on Harpocrates Vault `harpocrates.Set(key, value)`
 ```go
 harpocrates.Set("name", "kelechi")
 ```
 >Get(key, value) function takes two string input indicating the key and value(data)
+
+
+
 
 - Retrieving data from Harpocrates Vault `harpocrates.Get(key)`
 ```go
