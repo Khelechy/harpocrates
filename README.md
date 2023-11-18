@@ -34,11 +34,13 @@ Harpocrates is ready for use as both a Library and a Command Line Tool
 
 ### As a Library
 
-- Install the package
+#### Install the package
 ```shell
 go get github.com/khelechy/harpocrates
 ```
-- Import the package in your code
+
+
+#### Import the package in your code
 
 ```go
 import (
@@ -50,7 +52,7 @@ import (
 
 
 
-- Mount Harpocrates Vault on your environment `harpocrates.Mount(5)`
+#### Mount Harpocrates Vault on your environment `harpocrates.Mount(5)`
 ```go
 harpocrates.Mount(5)
 ```
@@ -76,7 +78,7 @@ The localStorage `harpocrates_db` folder and a `keys.json` file is generated in 
 
 
 
-- Unseal Harpocrates Vault on your environment `harpocrates.Unseal(secrets)`
+#### Unseal Harpocrates Vault on your environment `harpocrates.Unseal(secrets)`
 Unsealing the vault makes it possible to now store and retrieve data securely, unlocks `Get` and `Set` operations.
 
 ```go
@@ -88,7 +90,7 @@ harpocrates.Unseal(secrets)
 
 
 
-- Seal Harpocrates Vault on your environment `harpocrates.Seal(secrets)`
+#### Seal Harpocrates Vault on your environment `harpocrates.Seal(secrets)`
 Sealing the vault makes it impossible to store and retrieve data securely, locks `Get` and `Set` operations.
 
 ```go
@@ -102,7 +104,7 @@ harpocrates.Seal(secrets)
 
 
 
-- Storing data on Harpocrates Vault `harpocrates.Set(key, value)`
+#### Storing data on Harpocrates Vault `harpocrates.Set(key, value)`
 ```go
 harpocrates.Set("name", "kelechi")
 ```
@@ -111,7 +113,7 @@ harpocrates.Set("name", "kelechi")
 
 
 
-- Retrieving data from Harpocrates Vault `harpocrates.Get(key)`
+#### Retrieving data from Harpocrates Vault `harpocrates.Get(key)`
 ```go
 harpocrates.Get("name")
 ```
