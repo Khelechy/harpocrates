@@ -145,7 +145,7 @@ Browse into the harpocrates git project folder
 cd harpocrates
 ```
 
-Get the executable goignore file by running the command
+Get the executable harpocrates file by running the command
 ```sh
 go build ./harpocrates/cmd/harpocrates
 ```

@@ -8,15 +8,15 @@ import (
 
 	"github.com/khelechy/harpocrates/utils"
 
-	"github.com/google/uuid"
 	"github.com/fatih/color"
+	"github.com/google/uuid"
 )
 
 var mountHashKey = "tholos_mount_key"
-var unsealHashKey = "tholos_unseal_key"
+var sealHashKey = "tholos_seal_key"
 var seedingHashKey = "tholos_seeding_key"
 
-//Errors 
+// Errors
 var errNotMounted = "Harpocrates vault is not mounted"
 var errIsSealed = "Harpocrates vault is sealed"
 
@@ -72,11 +72,10 @@ func Unseal(secrets []string) {
 
 	if isUnsealed() {
 		color.Yellow("Harpocrates vault is already unsealed")
-		return
 	}
 
 	// Set localStorageUnseal value to true
-	utils.SetItem(unsealHashKey, "1")
+	utils.SetItem(sealHashKey, "1")
 
 	color.Green("Harpocrates vault is unsealed successfully")
 }
@@ -95,7 +94,7 @@ func Seal(secrets []string) {
 	ValidateSharedKeys(combinedSeedingSecret, seedingSecret)
 
 	// Set localStorageUnseal value to false
-	utils.SetItem(unsealHashKey, "0")
+	utils.SetItem(sealHashKey, "0")
 
 }
 
@@ -124,7 +123,6 @@ func Set(key, value string) {
 	// Check localStorage is unsealed
 	if isUnsealed() {
 		utils.SetItem(key, value)
-		return
 	}
 
 	color.Red(errIsSealed)
@@ -148,7 +146,7 @@ func isMounted() bool {
 }
 
 func isUnsealed() bool {
-	isUnsealed := utils.GetItem(unsealHashKey)
+	isUnsealed := utils.GetItem(sealHashKey)
 	if isUnsealed != "" && isUnsealed == "1" {
 		return true
 	}
