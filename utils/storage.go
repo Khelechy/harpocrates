@@ -2,12 +2,12 @@ package utils
 
 import (
 	"bytes"
-	"log"
 
 	"github.com/sopherapps/go-scdb/scdb"
+	"github.com/fatih/color"
 )
 
-var tholos = "../harpocrates_db"
+var tholos = "harpocrates_db"
 
 var maxKeys uint64 = 1_000_000
 var redundantBlocks uint16 = 1
@@ -26,7 +26,8 @@ func OpenStorage() *scdb.Store {
 	)
 
 	if err != nil {
-		log.Fatalf("Error opening store: %s", err)
+		color.Red("Error opening store: %s", err)
+		return nil
 	}
 
 	return vault
@@ -43,7 +44,8 @@ func SetItem(key, value string) {
 	byteValue := []byte(value)
 
 	if err := vault.Set(byteKey, byteValue, nil); err != nil {
-		log.Fatalf("Error inserting: %s", err)
+		color.Red("Error inserting: %s", err)
+		return
 	}
 }
 
@@ -59,7 +61,7 @@ func GetItem(key string) string {
 	byteValue, err := vault.Get(byteKey)
 
 	if err != nil {
-		log.Fatalf("Error getting: %s", err)
+		color.Red("Error getting: %s", err)
 	}
 
 	value := bytes.NewBuffer(byteValue).String()

@@ -1,11 +1,10 @@
 package utils
 
 import (
-	//"bytes"
 	"encoding/hex"
-	"log"
 
 	"github.com/hashicorp/vault/shamir"
+	"github.com/fatih/color"
 )
 
 func SplitSecret(secret string, parts, threshold int) ([]string, error) {
@@ -15,7 +14,7 @@ func SplitSecret(secret string, parts, threshold int) ([]string, error) {
 
 	byteParts, err := shamir.Split(byteSecret, parts, threshold)
 	if err != nil {
-		log.Fatalf("Failed to split secret: %v\n", err)
+		color.Red("Failed to split secret: %v\n", err)
 		return nil, err
 	}
 
@@ -39,7 +38,7 @@ func CombineSecret(secrets []string) (string, error) {
 	secretByte, err := shamir.Combine(byteParts)
 
 	if err != nil {
-		log.Fatalf("Failed to combine secret: %v\n", err)
+		color.Red("Failed to combine secret: %v\n", err)
 		return "", err
 	}
 

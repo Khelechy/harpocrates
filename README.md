@@ -118,3 +118,92 @@ harpocrates.Set("name", "kelechi")
 harpocrates.Get("name")
 ```
 >Get(key) function takes a string input indicating the key and returns the corresponding value if found.
+
+
+
+### As a Command Line Tool
+
+Once you have Go installed, you can install `harpocrates` using the following command:
+
+```sh
+go install github.com/khelechy/harpocrates/cmd/harpocrates
+```
+
+Go pkg:
+```sh
+go get -u github.com/khelechy/harpocrates/cmd/harpocrates@latest
+```
+
+### Without installing package
+Clone repo to your local directory with the command
+```sh
+git clone https://github.com/khelechy/harpocrates.git
+```
+
+Browse into the harpocrates git project folder
+```sh
+cd harpocrates
+```
+
+Get the executable goignore file by running the command
+```sh
+go build ./harpocrates/cmd/harpocrates
+```
+> A harpocrates executable file should be generated for you, and run all the available but this time prepend it with `./`.
+
+
+#### Mount Harpocrates Vault on your environment `harpocrates mount --parts 5`
+```sh
+./harpocrates mount --parts 5
+```
+
+>**mount --parts 5** command takes an integer "--parts" as an argument, which indicates how many parts you want the generated secrets to be broken into,
+>"--parts" should not be less than 5 and not greater than 12.
+
+The localStorage `harpocrates_db` folder and a `keys.json` file is generated in the root directory, which contains all the broken down secrets (distributed secrets), which would be used to `Unseal` and `Seal` the vault.
+
+
+
+#### Unseal Harpocrates Vault on your environment `harpocrates unseal --path ./keys.json`
+Unsealing the vault makes it possible to now store and retrieve data securely, unlocks `Get` and `Set` operations.
+
+```sh
+./harpocrates unseal --path ./keys.json
+```
+>**unseal --path /path/to/keys.json** command takes a string input into "--path" as an argument, which indicates the path to the keys.json file, harpocrates automatically selects 3 keys at random, combines and validates their authenticity, goes ahead to unseal the vault.
+
+#### Seal Harpocrates Vault on your environment `harpocrates seal --path ./keys.json`
+Sealing the vault makes it impossible to store and retrieve data securely, locks `Get` and `Set` operations.
+
+```sh
+./harpocrates seal --path ./keys.json
+```
+>**seal --path /path/to/keys.json** command takes a string input into "--path" as an argument, which indicates the path to the keys.json file, harpocrates automatically selects 3 keys at random, combines and validates their authenticity, goes ahead to seal the vault.
+
+
+
+#### Storing data on Harpocrates Vault `harpocrates set --key --value`
+```ssh
+./harpocrates seal --key name --value kelechi
+```
+>**set --key name --value kelechi** command takes two string input into "--key" and "--value" as arguments, indicating the key and value(data) to be stored
+
+
+
+
+#### <u>Retrieving data from Harpocrates Vault `harpocrates get --key`</u>
+```ssh
+./harpocrates get --key name
+```
+>**get --key name** comand takes a string input into the "--key" as an argument, indicating the key and returns the corresponding value if found.
+
+
+## Contribution
+Feel like something is missing? Fork the repo and send a PR.
+
+Encountered a bug? Fork the repo and send a PR.
+
+Alternatively, open an issue and we'll get to it as soon as we can.
+
+## Credit
+Kelechi Onyekwere -  [Github](https://github.com/Khelechy) [Twitter](https://twitter.com/khelechy1337)

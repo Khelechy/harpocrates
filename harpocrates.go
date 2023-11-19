@@ -3,18 +3,22 @@ package harpocrates
 import (
 	"encoding/json"
 	"errors"
-	"log"
 	"os"
 	"strings"
 
 	"github.com/khelechy/harpocrates/utils"
 
 	"github.com/google/uuid"
+	"github.com/fatih/color"
 )
 
 var mountHashKey = "tholos_mount_key"
 var unsealHashKey = "tholos_unseal_key"
 var seedingHashKey = "tholos_seeding_key"
+
+//Errors 
+var errNotMounted = "Harpocrates vault is not mounted"
+var errIsSealed = "Harpocrates vault is sealed"
 
 func Mount(part int) {
 	// Create keys and split ( into parts )
@@ -27,7 +31,8 @@ func Mount(part int) {
 	secrets, err := utils.SplitSecret(seedingSecret, part, 3)
 
 	if err != nil {
-		log.Fatalf("Error splitting secrets: %s", err)
+		color.Red("Error splitting secrets: %s", err)
+		return
 	}
 
 	// Save keys in a Json file
@@ -35,18 +40,20 @@ func Mount(part int) {
 
 	jsonData, err := json.MarshalIndent(data, "", "  ")
 	if err != nil {
-		log.Fatal("Error marshaling JSON:", err)
+		color.Red("Error marshaling JSON:", err)
 		return
 	}
 
-	if err = os.WriteFile("../keys.json", jsonData, 0644); err != nil {
-		log.Fatal("Error writing to file:", err)
+	if err = os.WriteFile("keys.json", jsonData, 0644); err != nil {
+		color.Red("Error writing to file:", err)
 		return
 	}
 
 	// Set localStorageUnseal value to true
 	utils.SetItem(mountHashKey, "1")
 	utils.SetItem(seedingHashKey, seedingSecret)
+
+	color.Green("Harpocrates vault is succesfully mounted")
 }
 
 func Unseal(secrets []string) {
@@ -55,7 +62,7 @@ func Unseal(secrets []string) {
 	combinedSeedingSecret, err := utils.CombineSecret(secrets)
 
 	if err != nil {
-		log.Fatal("Error unsealing vault:", err)
+		color.Red("Error unsealing vault:", err)
 		return
 	}
 
@@ -64,13 +71,14 @@ func Unseal(secrets []string) {
 	ValidateSharedKeys(combinedSeedingSecret, seedingSecret)
 
 	if isUnsealed() {
-		log.Println("Vault has already been unsealed")
+		color.Yellow("Harpocrates vault is already unsealed")
+		return
 	}
 
 	// Set localStorageUnseal value to true
 	utils.SetItem(unsealHashKey, "1")
 
-	log.Println("Vault has successfully been unsealed")
+	color.Green("Harpocrates vault is unsealed successfully")
 }
 
 func Seal(secrets []string) {
@@ -78,7 +86,7 @@ func Seal(secrets []string) {
 	// Combine Keys
 	combinedSeedingSecret, err := utils.CombineSecret(secrets)
 	if err != nil {
-		log.Fatal("Error sealing vault:", err)
+		color.Red("Error sealing harpocrates vault:", err)
 		return
 	}
 
@@ -94,7 +102,7 @@ func Seal(secrets []string) {
 func Get(key string) string {
 
 	if isMounted() == false {
-		log.Fatal("Vault has not been initialized")
+		color.Red(errNotMounted)
 	}
 
 	// Check localStorage is unsealed
@@ -102,14 +110,15 @@ func Get(key string) string {
 		return utils.GetItem(key)
 	}
 
-	log.Fatal("Vault has not been unsealed")
+	color.Red(errIsSealed)
 	return ""
 }
 
 func Set(key, value string) {
 
 	if isMounted() == false {
-		log.Fatal("Vault has not been initialized")
+		color.Red(errNotMounted)
+		return
 	}
 
 	// Check localStorage is unsealed
@@ -118,12 +127,13 @@ func Set(key, value string) {
 		return
 	}
 
-	log.Fatal("Vault has not been unsealed")
+	color.Red(errIsSealed)
+	return
 }
 
 func ValidateSharedKeys(combinedSeedingSecret, seedingSecret string) {
 	if combinedSeedingSecret != seedingSecret {
-		log.Fatal("Error unsealing vault: ", errors.New("Mismatched keys"))
+		color.Red("Error unsealing vault: ", errors.New("Mismatched keys"))
 		return
 	}
 }

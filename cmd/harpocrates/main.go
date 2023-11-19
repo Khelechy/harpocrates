@@ -1,11 +1,11 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
-	"os"
-	"encoding/json"
 	"math/rand"
+	"os"
 
 	"github.com/khelechy/harpocrates"
 
@@ -72,7 +72,7 @@ var setItemCmd = &cobra.Command{
 }
 
 var sealCmd = &cobra.Command{
-	Use: "seal",
+	Use:   "seal",
 	Short: "Seals the vault so that Set and Get operations would be blocked",
 	Run: func(cmd *cobra.Command, args []string) {
 		jsonFilePathFlag, _ := cmd.Flags().GetString("path")
@@ -80,14 +80,14 @@ var sealCmd = &cobra.Command{
 		if jsonFilePathFlag != "" {
 			keys := decodeJsonAndSelectKeys(jsonFilePathFlag)
 			harpocrates.Seal(keys)
-		}else{
+		} else {
 			log.Fatalln("Json file path is empty")
 		}
 	},
 }
 
 var unSealCmd = &cobra.Command{
-	Use: "unseal",
+	Use:   "unseal",
 	Short: "Unseals the vault so that Set and Get operations would be unblocked",
 	Run: func(cmd *cobra.Command, args []string) {
 		jsonFilePathFlag, _ := cmd.Flags().GetString("path")
@@ -95,13 +95,13 @@ var unSealCmd = &cobra.Command{
 		if jsonFilePathFlag != "" {
 			keys := decodeJsonAndSelectKeys(jsonFilePathFlag)
 			harpocrates.Unseal(keys)
-		}else{
+		} else {
 			log.Fatalln("Json file path is empty")
 		}
 	},
 }
 
-func decodeJsonAndSelectKeys(jsonFilePath string) []string{
+func decodeJsonAndSelectKeys(jsonFilePath string) []string {
 
 	jsonData, err := os.ReadFile(jsonFilePath)
 	if err != nil {
@@ -111,19 +111,23 @@ func decodeJsonAndSelectKeys(jsonFilePath string) []string{
 
 	// Unmarshal JSON data into KeysData struct
 	var keysData KeysData
-	if err = json.Unmarshal(jsonData, &keysData); err != nil{
+	if err = json.Unmarshal(jsonData, &keysData); err != nil {
 		log.Fatalln("Error unmarshalling JSON:", err)
 		return nil
 	}
 
 	// Randomly select 3 keys from the array
-	selectedKeys := make([]string, 3)
-	for i := 0; i < 3; i++ {
-		randomIndex := rand.Intn(len(keysData.Keys))
-		selectedKeys[i] = keysData.Keys[randomIndex]
-	}
+	shuffledKeys := shuffle(keysData.Keys)
+	selectedKeys := shuffledKeys[:3]
 
 	return selectedKeys
+}
+
+func shuffle(slice []string) []string {
+	rand.Shuffle(len(slice), func(i, j int) {
+		slice[i], slice[j] = slice[j], slice[i]
+	})
+	return slice
 }
 
 func init() {
@@ -134,6 +138,8 @@ func init() {
 	rootCmd.AddCommand(setItemCmd)
 
 	mountCmd.Flags().Int("parts", 5, "The number of parts the secret should be shared into")
+	sealCmd.Flags().String("path", "", "The path to the json file for keys.json")
+	unSealCmd.Flags().String("path", "", "The path to the json file for keys.json")
 	getItemCmd.Flags().String("key", "", "The key of the associated value to retrieve")
 	setItemCmd.Flags().String("key", "", "The key of the associated value to store")
 	setItemCmd.Flags().String("value", "", "The value of the associated key to store")
@@ -141,21 +147,8 @@ func init() {
 
 func main() {
 
-	// if err := rootCmd.Execute(); err != nil {
-	// 	fmt.Println(err)
-	// 	os.Exit(1)
-	// }
-
-	//harpocrates.Mount(5)
-
-	var keys = []string{"5105c79604545210e5fd30c1269ac1189e748aea93bae50db2d36bde8886adc143", "db206494f721b82e307417f54d18fc9396f12c067fd9d117a1f2e30fc5fb99f429", "94c7bcdf37cd0c2d48b19bf334b6e4c352a2729c55721fc9ef18aebfd94efe3ff8"}
-
-	harpocrates.Unseal(keys)
-
-	//harpocrates.Seal(keys)
-
-	//harpocrates.SetItem("name", "kelechi")
-	//ss := harpocrates.GetItem("name")
-
-	//fmt.Println(ss)
+	if err := rootCmd.Execute(); err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
 }
