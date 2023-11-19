@@ -126,13 +126,15 @@ harpocrates.Get("name")
 Once you have Go installed, you can install `harpocrates` using the following command:
 
 ```sh
-go install github.com/khelechy/harpocrates/cmd/harpocrates
+go install github.com/khelechy/harpocrates/cmd/harpocrates@latest
 ```
 
 Go pkg:
 ```sh
 go get -u github.com/khelechy/harpocrates/cmd/harpocrates@latest
 ```
+
+> After succesfully installing, you can access `harpocrates` tool in the CLI together with the available commands
 
 ### Without installing package
 Clone repo to your local directory with the command
