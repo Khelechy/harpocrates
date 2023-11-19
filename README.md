@@ -32,15 +32,15 @@ Harpocrates is ready for use as both a Library and a Command Line Tool
 - Ensure you have golang +v1.19 installed. You can check the [official instructions](https://go.dev/doc/install) for how
   to do that.
 
-### As a Library
+## As a Library
 
-#### Install the package
+### Install the package
 ```shell
 go get github.com/khelechy/harpocrates
 ```
 
 
-#### Import the package in your code
+### Import the package in your code
 
 ```go
 import (
@@ -52,7 +52,7 @@ import (
 
 
 
-#### Mount Harpocrates Vault on your environment `harpocrates.Mount(5)`
+### Mount Harpocrates Vault on your environment `harpocrates.Mount(5)`
 ```go
 harpocrates.Mount(5)
 ```
@@ -78,7 +78,7 @@ The localStorage `harpocrates_db` folder and a `keys.json` file is generated in 
 
 
 
-#### Unseal Harpocrates Vault on your environment `harpocrates.Unseal(secrets)`
+### Unseal Harpocrates Vault on your environment `harpocrates.Unseal(secrets)`
 Unsealing the vault makes it possible to now store and retrieve data securely, unlocks `Get` and `Set` operations.
 
 ```go
@@ -90,7 +90,7 @@ harpocrates.Unseal(secrets)
 
 
 
-#### Seal Harpocrates Vault on your environment `harpocrates.Seal(secrets)`
+### Seal Harpocrates Vault on your environment `harpocrates.Seal(secrets)`
 Sealing the vault makes it impossible to store and retrieve data securely, locks `Get` and `Set` operations.
 
 ```go
@@ -104,7 +104,7 @@ harpocrates.Seal(secrets)
 
 
 
-#### Storing data on Harpocrates Vault `harpocrates.Set(key, value)`
+### Storing data on Harpocrates Vault `harpocrates.Set(key, value)`
 ```go
 harpocrates.Set("name", "kelechi")
 ```
@@ -113,7 +113,7 @@ harpocrates.Set("name", "kelechi")
 
 
 
-#### Retrieving data from Harpocrates Vault `harpocrates.Get(key)`
+### Retrieving data from Harpocrates Vault `harpocrates.Get(key)`
 ```go
 harpocrates.Get("name")
 ```
@@ -121,7 +121,7 @@ harpocrates.Get("name")
 
 
 
-### As a Command Line Tool
+## As a Command Line Tool
 
 Once you have Go installed, you can install `harpocrates` using the following command:
 
@@ -152,7 +152,7 @@ go build ./harpocrates/cmd/harpocrates
 > A harpocrates executable file should be generated for you, and run all the available but this time prepend it with `./`.
 
 
-#### Mount Harpocrates Vault on your environment `harpocrates mount --parts 5`
+### Mount Harpocrates Vault on your environment `harpocrates mount --parts 5`
 ```sh
 ./harpocrates mount --parts 5
 ```
@@ -164,7 +164,7 @@ The localStorage `harpocrates_db` folder and a `keys.json` file is generated in 
 
 
 
-#### Unseal Harpocrates Vault on your environment `harpocrates unseal --path ./keys.json`
+### Unseal Harpocrates Vault on your environment `harpocrates unseal --path ./keys.json`
 Unsealing the vault makes it possible to now store and retrieve data securely, unlocks `Get` and `Set` operations.
 
 ```sh
@@ -172,7 +172,7 @@ Unsealing the vault makes it possible to now store and retrieve data securely, u
 ```
 >**unseal --path /path/to/keys.json** command takes a string input into "--path" as an argument, which indicates the path to the keys.json file, harpocrates automatically selects 3 keys at random, combines and validates their authenticity, goes ahead to unseal the vault.
 
-#### Seal Harpocrates Vault on your environment `harpocrates seal --path ./keys.json`
+### Seal Harpocrates Vault on your environment `harpocrates seal --path ./keys.json`
 Sealing the vault makes it impossible to store and retrieve data securely, locks `Get` and `Set` operations.
 
 ```sh
@@ -182,7 +182,7 @@ Sealing the vault makes it impossible to store and retrieve data securely, locks
 
 
 
-#### Storing data on Harpocrates Vault `harpocrates set --key --value`
+### Storing data on Harpocrates Vault `harpocrates set --key --value`
 ```ssh
 ./harpocrates seal --key name --value kelechi
 ```
@@ -191,7 +191,7 @@ Sealing the vault makes it impossible to store and retrieve data securely, locks
 
 
 
-#### <u>Retrieving data from Harpocrates Vault `harpocrates get --key`</u>
+### Retrieving data from Harpocrates Vault `harpocrates get --key`
 ```ssh
 ./harpocrates get --key name
 ```
