@@ -149,7 +149,7 @@ cd harpocrates
 
 Get the executable harpocrates file by running the command
 ```sh
-go build ./harpocrates/cmd/harpocrates
+go build ./cmd/harpocrates
 ```
 > A harpocrates executable file should be generated for you, and run all the available but this time prepend it with `./`.
 
@@ -185,7 +185,7 @@ Sealing the vault makes it impossible to store and retrieve data securely, locks
 
 
 ### Storing data on Harpocrates Vault `harpocrates set --key --value`
-```ssh
+```sh
 ./harpocrates seal --key name --value kelechi
 ```
 >**set --key name --value kelechi** command takes two string input into "--key" and "--value" as arguments, indicating the key and value(data) to be stored
@@ -194,7 +194,7 @@ Sealing the vault makes it impossible to store and retrieve data securely, locks
 
 
 ### Retrieving data from Harpocrates Vault `harpocrates get --key`
-```ssh
+```sh
 ./harpocrates get --key name
 ```
 >**get --key name** comand takes a string input into the "--key" as an argument, indicating the key and returns the corresponding value if found.
