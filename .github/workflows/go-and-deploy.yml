@@ -34,7 +34,7 @@ jobs:
       run: |
         docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag khelechy/harpocrates:${{github.sha}}
+      run: docker build . --file Dockerfile --tag khelechy/harpocrates
 
     - name: docker push 
-      run: docker push khelechy/harpocrates:${{github.sha}}
+      run: docker push khelechy/harpocrates
