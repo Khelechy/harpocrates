@@ -1,6 +1,6 @@
 # Harpocrates
 
-![Harpocrates](https://i.ibb.co/b1y2hF1/Harpocrates-Main.png)
+![Harpocrates](https://i.ibb.co/SQdmzBr/Harpocrates-Main-1.png)
 
 ![go-and-deploy-workflow](https://github.com/khelechy/harpocrates/actions/workflows/go-and-deploy.yml/badge.svg)
 
