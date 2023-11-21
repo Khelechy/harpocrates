@@ -188,7 +188,7 @@ Sealing the vault makes it impossible to store and retrieve data securely, locks
 
 ### Storing data on Harpocrates Vault `harpocrates set --key --value`
 ```sh
-./harpocrates seal --key name --value kelechi
+./harpocrates set --key name --value kelechi
 ```
 >**set --key name --value kelechi** command takes two string input into "--key" and "--value" as arguments, indicating the key and value(data) to be stored
 
