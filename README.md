@@ -214,3 +214,6 @@ Feel like something is missing? Fork the repo and send a PR.
 Encountered a bug? Fork the repo and send a PR.
 
 Alternatively, open an issue and we'll get to it as soon as we can.
+
+#### Logo Credit
+Eugene Ebere - [Twitter](https://twitter.com/Eugenedotfig)
