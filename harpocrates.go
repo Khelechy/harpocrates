@@ -96,6 +96,8 @@ func Seal(secrets []string) {
 	// Set localStorageUnseal value to false
 	utils.SetItem(sealHashKey, "0")
 
+	color.Green("Harpocrates vault is sealed successfully")
+
 }
 
 func Get(key string) string {
@@ -123,10 +125,11 @@ func Set(key, value string) {
 	// Check localStorage is unsealed
 	if isUnsealed() {
 		utils.SetItem(key, value)
+	}else{
+		
+		color.Red(errIsSealed)
+		return
 	}
-
-	color.Red(errIsSealed)
-	return
 }
 
 func ValidateSharedKeys(combinedSeedingSecret, seedingSecret string) {
