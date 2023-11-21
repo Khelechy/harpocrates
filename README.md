@@ -1,5 +1,7 @@
 # Harpocrates
 
+![example workflow](https://github.com/khelechy/harpocrates/actions/workflows/go.yml/badge.svg)
+
 > Harpocrates was the god of silence, secrets and confidentiality
 
 A secure key/value vault (localstorage) that makes use of distributed secrets to secure data in the vault. Harpocrates gives you a more secure way of saving your data in a manner where access to the data is only possible via distributed shared secrets. It is based off Shamir Secrets Sharing cryptography algorithm and Scdb for localStorage. Inspired by `Hashicorp Vault`, Harpocrates provides easy and faster implementation, accessibilty and flexibity of usage.
