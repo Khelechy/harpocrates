@@ -26,3 +26,15 @@ jobs:
 
     - name: Test
       run: go test -v ./...
+
+    - name: docker login
+      env:
+        DOCKER_USER: ${{secrets.DOCKER_USERNAME}}
+        DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
+      run: |
+        docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag khelechy/harpocrates:${{github.sha}}
+
+    - name: docker push 
+      run: docker push khelechy/harpocrates:${{github.sha}}
