@@ -1,6 +1,6 @@
 # Harpocrates
 
-![example workflow](https://github.com/khelechy/harpocrates/actions/workflows/go.yml/badge.svg)
+![example workflow](https://github.com/khelechy/harpocrates/actions/workflows/go-and-deploy.yml/badge.svg)
 
 > Harpocrates was the god of silence, secrets and confidentiality
 
