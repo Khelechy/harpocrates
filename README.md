@@ -6,6 +6,8 @@
 
 A secure key/value vault (localstorage) that makes use of distributed secrets to secure data in the vault. Harpocrates gives you a more secure way of saving your data in a manner where access to the data is only possible via distributed shared secrets. It is based off Shamir Secrets Sharing cryptography algorithm and Scdb for localStorage. Inspired by `Hashicorp Vault`, Harpocrates provides easy and faster implementation, accessibilty and flexibity of usage.
 
+**Harpocrates may not be production-ready yet. It works, quite well but it requires more rigorous testing.**
+
 ## Purpose
 
 To ensure data storage have multiple, yet related secrets for authentication, limit risks resulting from a compromised secret.
